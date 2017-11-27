@@ -1,8 +1,9 @@
-# ZipLibrary
-使用ICSharpCode的Zip库实现的Zip文件压缩支持类库.
+﻿using YuWan.ZipLibrary;
 
-使用方式:
-<pre><code>
+namespace ZipLibTest
+{
+    class Program
+    {
         static void Main(string[] args)
         {
             /// <summary>
@@ -18,4 +19,5 @@
             DCompressV1.Decompress(destFile, @"D:\");
             //V2版本的使用方式差不多.
         }
-</code></pre>
+    }
+}
