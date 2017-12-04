@@ -13,7 +13,7 @@ namespace YuWan
         /// </summary>
         public static class DCompressV1
         {
-            private static readonly object OperateLock = new object();
+            private static object OperateLock { get; } = new object();
 
             /// <summary>
             /// 压缩文件
@@ -115,12 +115,15 @@ namespace YuWan
                     zip.CommitUpdate();
                 }
             }
+
             /// <summary>
             /// 解压文件
             /// </summary>
             /// <param name="zipPath">要解压的文件</param>
             /// <param name="outputDir">解压后放置的目录</param>
-            public static void UnZipFile(string zipPath, string outputDir) => new FastZip().ExtractZip(zipPath, outputDir, "");
+            public static void UnZipFile(string zipPath, string outputDir) =>
+                new FastZip().ExtractZip(zipPath, outputDir, "");
+
             /// <summary>
             /// 解压文件
             /// </summary>
@@ -139,7 +142,8 @@ namespace YuWan
                             ZipEntry entry;
                             while ((entry = zipInStream.GetNextEntry()) != null)
                             {
-                                using (var fileStreamOut = new FileStream(destDir + @"\" + entry.Name, FileMode.Create, FileAccess.Write))
+                                using (var fileStreamOut = new FileStream(destDir + @"\" + entry.Name, FileMode.Create,
+                                    FileAccess.Write))
                                 {
                                     int size;
                                     var buffer = new byte[4096];

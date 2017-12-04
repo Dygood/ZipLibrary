@@ -37,23 +37,24 @@ namespace YuWan
             /// <param name="compressionLevel">压缩等级，范围从0到9，可选，默认为6</param>
             /// <exception cref="Exception"></exception>
             /// <returns></returns>
-            public static bool CompressFile(IEnumerable<string> sourceList, string zipFilePath, string comment = null, string password = null, int compressionLevel = 6)
+            public static bool CompressFile(IEnumerable<string> sourceList, string zipFilePath, string comment = null,
+                string password = null, int compressionLevel = 6)
             {
                 try
                 {
                     //检测目标文件所属的文件夹是否存在，如果不存在则建立
                     var zipFileDirectory = Path.GetDirectoryName(zipFilePath);
                     if (!Directory.Exists(zipFileDirectory))
-                            Directory.CreateDirectory(zipFileDirectory ?? throw new InvalidOperationException());
+                        Directory.CreateDirectory(zipFileDirectory ?? throw new InvalidOperationException());
                     var dictionaryList = PrepareFileSystementities(sourceList);
                     using (var zipStream = new ZipOutputStream(File.Create(zipFilePath)))
                     {
-                        zipStream.Password = password;//设置密码
-                        zipStream.SetComment(comment);//添加注释
-                        zipStream.SetLevel(CheckCompressionLevel(compressionLevel));//设置压缩等级
-                        foreach (var key in dictionaryList.Keys)//从字典取文件添加到压缩文件
+                        zipStream.Password = password; //设置密码
+                        zipStream.SetComment(comment); //添加注释
+                        zipStream.SetLevel(CheckCompressionLevel(compressionLevel)); //设置压缩等级
+                        foreach (var key in dictionaryList.Keys) //从字典取文件添加到压缩文件
                         {
-                            if (File.Exists(key))//判断是文件还是文件夹
+                            if (File.Exists(key)) //判断是文件还是文件夹
                             {
                                 var fileItem = new FileInfo(key);
                                 using (var readStream = fileItem.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -74,7 +75,7 @@ namespace YuWan
                                     readStream.Close();
                                 }
                             }
-                            else//对文件夹的处理
+                            else //对文件夹的处理
                             {
                                 var zipEntry = new ZipEntry(dictionaryList[key] + "/");
                                 zipStream.PutNextEntry(zipEntry);
@@ -101,7 +102,8 @@ namespace YuWan
             /// <exception cref="FileNotFoundException"></exception>
             /// <exception cref="Exception"></exception>
             /// <returns></returns>
-            public static bool DecomparessFile(string sourceFile, string destinationDirectory = null, string password = null)
+            public static bool DecomparessFile(string sourceFile, string destinationDirectory = null,
+                string password = null)
             {
                 if (!File.Exists(sourceFile))
                     throw new FileNotFoundException("要解压的文件不存在", sourceFile);
@@ -110,15 +112,18 @@ namespace YuWan
                 try
                 {
                     if (!Directory.Exists(destinationDirectory))
-                        Directory.CreateDirectory(destinationDirectory ?? throw new ArgumentNullException(nameof(destinationDirectory)));
-                    using (var zipStream = new ZipInputStream(File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                        Directory.CreateDirectory(destinationDirectory ??
+                                                  throw new ArgumentNullException(nameof(destinationDirectory)));
+                    using (var zipStream =
+                        new ZipInputStream(File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
                     {
                         zipStream.Password = password;
                         var zipEntry = zipStream.GetNextEntry();
                         while (zipEntry != null)
                         {
-                            if (zipEntry.IsDirectory)//如果是文件夹则创建
-                                Directory.CreateDirectory(Path.Combine(destinationDirectory, Path.GetDirectoryName(zipEntry.Name) ?? throw new InvalidOperationException()));
+                            if (zipEntry.IsDirectory) //如果是文件夹则创建
+                                Directory.CreateDirectory(Path.Combine(destinationDirectory,
+                                    Path.GetDirectoryName(zipEntry.Name) ?? throw new InvalidOperationException()));
                             else
                             {
                                 var fileName = Path.GetFileName(zipEntry.Name);
@@ -140,7 +145,7 @@ namespace YuWan
                                     fileItem.LastWriteTime = zipEntry.DateTime;
                                 }
                             }
-                            zipEntry = zipStream.GetNextEntry();//获取下一个文件
+                            zipEntry = zipStream.GetNextEntry(); //获取下一个文件
                         }
                         zipStream.Close();
                     }
@@ -151,14 +156,16 @@ namespace YuWan
                     throw new Exception("文件解压发生错误", ex);
                 }
             }
+
             /// <summary>
             /// 为压缩准备文件系统对象
             /// </summary>
             /// <param name="sourceFileEntityPathList"></param>
             /// <returns></returns>
-            private static Dictionary<string, string> PrepareFileSystementities(IEnumerable<string> sourceFileEntityPathList)
+            private static Dictionary<string, string> PrepareFileSystementities(
+                IEnumerable<string> sourceFileEntityPathList)
             {
-                var fileEntityDictionary = new Dictionary<string, string>();//文件字典
+                var fileEntityDictionary = new Dictionary<string, string>(); //文件字典
                 foreach (var fileEntityPath in sourceFileEntityPathList)
                 {
                     var path = fileEntityPath;
@@ -166,14 +173,14 @@ namespace YuWan
                     if (path.EndsWith(@"\"))
                         path = path.Remove(path.LastIndexOf(@"\", StringComparison.Ordinal));
                     var parentDirectoryPath = Path.GetDirectoryName(path) + @"\";
-                    if (parentDirectoryPath.EndsWith(@":\\"))//防止根目录下把盘符压入的错误
+                    if (parentDirectoryPath.EndsWith(@":\\")) //防止根目录下把盘符压入的错误
                         parentDirectoryPath = parentDirectoryPath.Replace(@"\\", @"\");
                     //获取目录中所有的文件系统对象
                     var subDictionary = GetAllFileSystemEntities(path, parentDirectoryPath);
                     //将文件系统对象添加到总的文件字典中
                     foreach (var key in subDictionary.Keys)
                     {
-                        if (!fileEntityDictionary.ContainsKey(key))//检测重复项
+                        if (!fileEntityDictionary.ContainsKey(key)) //检测重复项
                             fileEntityDictionary.Add(key, subDictionary[key]);
                     }
                 }
@@ -190,7 +197,7 @@ namespace YuWan
             {
                 var entitiesDictionary = new Dictionary<string, string>
                 {
-                    { source, source.Replace(topDirectory, "") }
+                    {source, source.Replace(topDirectory, "")}
                 };
                 if (!Directory.Exists(source))
                     return entitiesDictionary;
