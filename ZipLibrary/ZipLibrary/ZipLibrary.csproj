@@ -7,8 +7,8 @@
     <ProjectGuid>{86A912D1-C6E4-424D-938B-13402EE59A77}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YuWan.ZipLibrary</RootNamespace>
-    <AssemblyName>ZipLibrary</AssemblyName>
+    <RootNamespace>Miraclesoft.ZipLibrary</RootNamespace>
+    <AssemblyName>Miraclesoft.ZipLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

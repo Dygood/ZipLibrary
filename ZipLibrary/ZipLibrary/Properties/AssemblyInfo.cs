@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("YuWan.ZipLibrary")]
+[assembly: AssemblyTitle("Miraclesoft.ZipLibrary")]
 [assembly: AssemblyDescription("包含两个版本的处理方式.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("YuWan.ZipLibrary")]
+[assembly: AssemblyProduct("Miraclesoft.ZipLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
